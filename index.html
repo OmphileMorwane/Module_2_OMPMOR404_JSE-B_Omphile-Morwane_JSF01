@@ -8,12 +8,7 @@
       sizes="180x180"
       href="./public/apple-touch-icon.png"
     />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/favicon-32x32.png"
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link
       rel="icon"
       type="image/png"
@@ -40,11 +35,7 @@
             class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
           >
             <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-              <img
-                src="online-shop.png"
-                class="h-8"
-                alt="Flowbite Logo"
-              />
+              <img src="online-shop.png" class="h-8" alt="Flowbite Logo" />
               <span
                 class="self-center text-2xl font-semibold whitespace-nowrap text-white"
                 >SwiftCart</span
@@ -145,7 +136,11 @@
 
       <!-- Filter and Sort Controls -->
       <div class="max-w-screen-xl mx-auto mt-8">
-        <select x-model="selectedCategory" x-on:change="filterProducts" class="bg-gray-200 p-2 rounded">
+        <select
+          x-model="selectedCategory"
+          x-on:change="filterProducts"
+          class="bg-gray-200 p-2 rounded"
+        >
           <option value="">All Categories</option>
           <template x-for="category in categories" :key="category">
             <option :value="category" x-text="category"></option>
@@ -153,38 +148,58 @@
         </select>
         <div class="flex sm:w-[95%] max-w-[21rem] md:w-60 mt-4">
           <label for="sort" class="w-20 my-auto font-semibold">Sort by: </label>
-          <select x-model="sorting" x-on:change="handleSort" id="sort" class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+          <select
+            x-model="sorting"
+            x-on:change="handleSort"
+            id="sort"
+            class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+          >
             <option value="default">Default</option>
             <option value="low">Price: Low to High</option>
             <option value="high">Price: High to Low</option>
           </select>
         </div>
       </div>
-      
+
       <script>
-        function shoppingCart () {
-        return {
-          loading: true,
-          products: [],
-          navbarOpen: false,
+        function shoppingCart() {
+          return {
+            loading: true,
+            products: [],
+            categories: [],
+            sorting: "default", // Default sorting
+            async init() {
+              await this.fetchCategories();
+              await this.fetchProducts();
+              this.loading = false;
+            },
 
-          async init() {
-            await this.fetchProducts();
-            this.loading = false;
-          },
-          async fetchProducts() {
-            try {
-              const response = await fetch("https://fakestoreapi.com/products");
-              this.products = await response.json();
-              this.filteredProducts = this.products;
-            } catch (error) {
-              console.error("Error fetching products:", error);
-            }
-          },
-      }
-    };
+            async fetchCategories() {
+              try {
+                const response = await fetch(
+                  "https://fakestoreapi.com/products/categories"
+                );
+                this.categories = await response.json();
+              } catch (error) {
+                console.error("Error fetching categories:", error);
+              }
+            },
+
+            async fetchProducts() {
+              try {
+                const response = await fetch(
+                  "https://fakestoreapi.com/products"
+                );
+                this.products = await response.json();
+                this.originalProducts = [...this.products]; // Store original products
+                this.filteredProducts = this.products;
+              } catch (error) {
+                console.error("Error fetching products:", error);
+              }
+            },
+          };
+        }
       </script>
-
     </div>
     <div id="app"></div>
     <script type="module" src="/main.js"></script>
