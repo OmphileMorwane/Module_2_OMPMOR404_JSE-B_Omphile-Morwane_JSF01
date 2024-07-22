@@ -31,7 +31,7 @@
     <title>SwiftCart</title>
     <link rel="stylesheet" href="src/style.css" />
   </head>
-  <body class="bg-blue-300">
+  <body class="bg-blue-100">
     <div x-data="ShoppingCart()">
       <!-- Header Component -->
       <header class="sticky z-50 top-0">
@@ -142,6 +142,25 @@
       </header>
       <!--Loading State-->
       <div x-show="loading" class="loading">Loading...</div>
+
+      <!-- Filter and Sort Controls -->
+      <div class="max-w-screen-xl mx-auto mt-8">
+        <select x-model="selectedCategory" x-on:change="filterProducts" class="bg-gray-200 p-2 rounded">
+          <option value="">All Categories</option>
+          <template x-for="category in categories" :key="category">
+            <option :value="category" x-text="category"></option>
+          </template>
+        </select>
+        <div class="flex sm:w-[95%] max-w-[21rem] md:w-60 mt-4">
+          <label for="sort" class="w-20 my-auto font-semibold">Sort by: </label>
+          <select x-model="sorting" x-on:change="handleSort" id="sort" class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+            <option value="default">Default</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+      
       <script>
         function shoppingCart () {
         return {
