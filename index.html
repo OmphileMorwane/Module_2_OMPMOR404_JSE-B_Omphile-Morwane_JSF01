@@ -197,11 +197,45 @@
                 console.error("Error fetching products:", error);
               }
             },
-          };
-        }
-      </script>
-    </div>
-    <div id="app"></div>
-    <script type="module" src="/main.js"></script>
+            filterProducts() {
+            if (this.selectedCategory) {
+              this.filteredProducts = this.products.filter(product => product.category === this.selectedCategory);
+            } else {
+              this.filteredProducts = this.products;
+            }
+            this.sortProducts();
+          },
+
+          handleSort() {
+            this.sortProducts();
+          },
+
+          sortProducts() {
+            if (this.sorting === "low") {
+              this.filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (this.sorting === "high") {
+              this.filteredProducts.sort((a, b) => b.price - a.price);
+            } else {
+              this.filteredProducts = [...this.originalProducts]; // Reset to original order
+              if (this.selectedCategory) {
+                this.filteredProducts = this.filteredProducts.filter(product => product.category === this.selectedCategory);
+              }
+            }
+          },
+
+          resetFilters() {
+            this.selectedCategory = "";
+            this.sorting = 'default';
+            this.filteredProducts = [...this.originalProducts];
+          },
+
+          toggleNavbar() {
+            this.navbarOpen = !this.navbarOpen;
+          },
+        };
+      }
+    </script>
   </body>
-</html>
+</html
+          
+       
