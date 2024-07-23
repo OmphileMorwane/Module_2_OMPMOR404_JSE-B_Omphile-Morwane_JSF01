@@ -11,7 +11,9 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
     <title>SwiftCart</title>
+     <!-- Load Alpine.js for reactive components -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Load Tailwind CSS for styling -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   </head>
   <body class="bg-blue-100">
@@ -26,13 +28,14 @@
               <img src="./assets/online-shop.png" class="h-8" alt="Flowbite Logo" />
               <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">SwiftCart</span>
             </a>
+            <!-- Mobile Menu Button -->
             <button x-on:click="toggleNavbar" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-dropdown" aria-expanded="false">
               <span class="sr-only">Open main menu</span>
               <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
               </svg>
             </button>
-
+            <!-- Navbar Links -->
             <div :class="{'hidden': !navbarOpen, 'block': navbarOpen}" class="w-full md:block md:w-auto" id="navbar-dropdown">
               <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-500 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
                 <li>
@@ -43,6 +46,7 @@
                     <div class="absolute left-3 -top-4">
                       <p class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white">2</p>
                     </div>
+                     <!-- Shopping Cart Icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="h-6 w-6 stroke-white cursor-pointer">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/>
                     </svg>
@@ -60,7 +64,7 @@
         </nav>
       </header>
 
-      <!-- Loading State -->
+      <!-- Skeleton Loading State -->
       <template x-if="loading">
         <div class="max-w-screen-xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <template x-for="n in 8" :key="n">
@@ -77,12 +81,15 @@
 
      <!-- Filter and Sort Controls -->
 <div class="flex max-w-screen-xl mx-auto mt-8 space-x-8">
+  <!-- Category Filter -->
   <select x-model="selectedCategory" x-on:change="filterProducts" class="bg-gray-200 p-2 rounded">
     <option value="">All Categories</option>
     <template x-for="category in categories" :key="category">
       <option :value="category" x-text="category"></option>
     </template>
   </select>
+  <!-- Sort Control -->
+
   <div class="flex items-center space-x-2">
     <label for="sort" class="font-semibold">Sort by:</label>
     <select x-model="sorting" x-on:change="handleSort" id="sort" class="p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
@@ -120,6 +127,8 @@
       </div>
       <div class="flex  justify-end mt-4 mx-auto space-x-14">
         <div class="group relative">
+
+          <!-- Add to wishlist icon -->
           <button
               x-on:click.stop="toggleFavorite(product)"
               :class="{
@@ -145,6 +154,8 @@
             </button>
             <span class="absolute hidden group-hover:block w-auto p-2 m-2 min-w-max top-6 left-2 rounded-md shadow-md text-white bg-gray-800 text-xs font-bold">Add to Wishlist</span>
         </div>
+
+          <!-- Add to Cart Button -->
         <button class="bg-blue-500 text-white px-3 py-1 rounded-md focus:outline-none hover:bg-blue-600" x-on:click.stop="addToCart(product)">
           Add to Cart
         </button>
@@ -154,7 +165,7 @@
 </div>
 
 
-<!-- Modal -->
+<!--Product modal -->
 <div x-show="modalOpen" x-on:click.away="closeModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center">
   <div class="bg-white p-8 rounded shadow-lg max-w-lg w-full relative">
     <button x-on:click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
@@ -184,21 +195,25 @@
 
 
 
+          <!--JavaScript for Alpine.js-->
     <script>
       function shoppingCart() {
         return {
-          loading: true,
-          products: [],
+          // Data for products and cart
+          loading: true, //loading state
+          products: [], //Array of all products
           originalProducts: [], // Store original order of products
-          categories: [],
-          filteredProducts: [],
-          selectedCategory: "",
+          categories: [], //Array of all categoris
+          filteredProducts: [], //Products filtered based on Cataegory
+          selectedCategory: "", //Currently selected category for filtering
           sorting: 'default', // Default sorting
-          modalOpen: false,
-          selectedProduct: {},
+          modalOpen: false, //Modal visibility
+          selectedProduct: {}, //Currently selected product for modal
           navbarOpen: false,
 
+          //Initializing the app
           async init() {
+            //Fetching products and categories
             await this.fetchCategories();
             await this.fetchProducts();
             this.loading = false;
@@ -237,7 +252,7 @@
           closeModal() {
             this.modalOpen = false;
           },
-
+          //Filtering products based on category  
           filterProducts() {
             if (this.selectedCategory) {
               this.filteredProducts = this.products.filter(product => product.category === this.selectedCategory);
@@ -246,7 +261,7 @@
             }
             this.sortProducts();
           },
-
+          //Handling product sorting
           handleSort() {
             this.sortProducts();
           },
@@ -269,7 +284,7 @@
             this.sorting = 'default';
             this.filteredProducts = [...this.originalProducts];
           },
-
+          //Toggling th emobile navbar
           toggleNavbar() {
             this.navbarOpen = !this.navbarOpen;
           },
