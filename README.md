@@ -38,5 +38,4 @@ SwiftCart is designed to offer a user-friendly shopping experience with a range 
    git clone https://github.com/OmphileMorwane/Module_2_OMPMOR404_JSE-B_Omphile-Morwane_JSF01.git
 
 2. **Open terminal**   
-   - cd JSF001
    - npm run dev
